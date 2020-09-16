@@ -271,7 +271,7 @@ import efficientnet.keras
 model_current = sm.FPN
 
 BACKBONE = 'efficientnetb4'
-DATA_DIR_CLASSES_SBD3 = "classes.txt"
+DATA_DIR_CLASSES_SBD3 = "app/classes.txt"
 CLASSES_SBD3 = loadClasses(DATA_DIR_CLASSES_SBD3)
 CLASSES_SBD3 = list(CLASSES_SBD3.values())
 TRANSFERLEARNING = False
@@ -285,7 +285,7 @@ n_classes = 1 if len(CLASSES_SBD3) == 1 else (len(CLASSES_SBD3) )
 activation = 'sigmoid' if n_classes == 1 else 'softmax'
 
 model = model_current(BACKBONE, classes=len(CLASSES_TF), activation=activation, encoder_freeze=True)
-model.load_weights('last_model.h5')
+model.load_weights('app/last_model.h5')
 # load model
 # summarize model.
 model.summary()
