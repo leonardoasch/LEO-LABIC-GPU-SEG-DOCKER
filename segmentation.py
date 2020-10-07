@@ -136,7 +136,7 @@ def visualize(images):
     n = len(images)
     plt.figure(figsize=(16, 5))
     i=0
-    path_resultado = "Seg_Res"
+    path_resultado = "/seg"
     if os.path.isdir(path_resultado) == False:
         os.mkdir(path_resultado)
         
@@ -322,7 +322,7 @@ os.environ['TZ'] = 'UTC'
 time.tzset()
 
 
-topic = "leonardo-stream"
+topic = "leonardo-stream2"
 
 consumer = KafkaConsumer(
      topic,
@@ -334,7 +334,7 @@ consumer = KafkaConsumer(
      )
 
 
-myclient = pymongo.MongoClient("mongodb://10.0.10.50:27017/")
+myclient = pymongo.MongoClient("mongodb://10.0.10.11:27017/")
 mydb = myclient["leonardo"]
 mycol = mydb["leonardostream"]
 
