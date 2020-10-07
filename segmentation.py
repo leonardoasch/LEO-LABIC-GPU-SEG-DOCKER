@@ -322,7 +322,7 @@ os.environ['TZ'] = 'UTC'
 time.tzset()
 
 
-topic = "leonardo-stream2"
+topic = "leonardo-stream-2"
 
 consumer = KafkaConsumer(
      topic,
