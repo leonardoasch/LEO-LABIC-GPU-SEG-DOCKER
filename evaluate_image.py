@@ -148,7 +148,7 @@ preprocess_input = sm.get_preprocessing(BACKBONE)
 
 
 os.environ['TZ'] = 'UTC'
-time.tzset()
+#time.tzset()
 
 
 topic = "leonardo-stream-2"
