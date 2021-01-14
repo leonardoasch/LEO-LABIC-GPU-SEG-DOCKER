@@ -204,11 +204,11 @@ for message in consumer:
     masks = [(mask == v) for v in class_values]
     masks = []
     for v in class_values:
-	 aMask = (mask == v)
-	 kernel = np.ones((5,5))
-	 aMask = np.array(aMask, dtype=np.uint8)
-	 aMask = cv2.morphologyEx(aMask, cv2.MORPH_OPEN, kernel)
-	 masks.append(aMask)
+	aMask = (mask == v)
+	kernel = np.ones((5,5))
+	aMask = np.array(aMask, dtype=np.uint8)
+	aMask = cv2.morphologyEx(aMask, cv2.MORPH_OPEN, kernel)
+	masks.append(aMask)
 
 
      mask = np.stack(masks, axis=-1).astype('float')
