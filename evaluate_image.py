@@ -26,6 +26,8 @@ import errno
 import argparse
 
 from json import loads
+from datetime import datetime
+
 
 
 from kafka import KafkaConsumer
