@@ -25,6 +25,8 @@ import os
 import errno
 import argparse
 
+from json import loads
+
 
 from kafka import KafkaConsumer
 import pymongo
