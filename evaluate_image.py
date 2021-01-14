@@ -7,7 +7,7 @@ config = tf.compat.v1.ConfigProto
 #config.gpu_options.allow_growth = True
 #config.log_device_placement = True
 
-tf.Session(config=config)
+#tf.Session(config=config)
 
 import numpy as np  
 from skimage import io 
