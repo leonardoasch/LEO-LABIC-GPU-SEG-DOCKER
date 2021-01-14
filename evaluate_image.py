@@ -32,8 +32,8 @@ from pymongo import MongoClient
 from bson.objectid import ObjectId
 
 
-sys.path.append('./With_Detection/')
-sys.path.append('./SSD-Tensorflow/')
+#sys.path.append('./With_Detection/')
+#sys.path.append('./SSD-Tensorflow/')
 
 producer_topic = "leonardo-stream-3"
 
