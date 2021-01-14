@@ -204,11 +204,11 @@ for message in consumer:
     masks = [(mask == v) for v in class_values]
     masks = []
     for v in class_values:
-	aMask = (mask == v)
-	kernel = np.ones((5,5))
-	aMask = np.array(aMask, dtype=np.uint8)
-	aMask = cv2.morphologyEx(aMask, cv2.MORPH_OPEN, kernel)
-	masks.append(aMask)
+        aMask = (mask == v)
+        kernel = np.ones((5,5))
+        aMask = np.array(aMask, dtype=np.uint8)
+        aMask = cv2.morphologyEx(aMask, cv2.MORPH_OPEN, kernel)
+        masks.append(aMask)
 
 
      mask = np.stack(masks, axis=-1).astype('float')
@@ -218,14 +218,12 @@ for message in consumer:
      classesImage, qtdClass = np.unique(mask, return_counts=True)
 
      for num in range(len(classesImage)):
-		idClasse = classesImage[num]
-		if CLASSES[idClasse] == 'skin' or True:
-			qtd = qtdClass[num]
-
-			newvalues = { "$set": { CLASSES[idClasse] : True }}
-
-		
-			mycol.update_one({"_id": ObjectId(message["mongoid"])}, newvalues)
+                idClasse = classesImage[num]
+                if CLASSES[idClasse] == 'skin' or True:
+                        qtd = qtdClass[num]
+                        newvalues = { "$set": { CLASSES[idClasse] : True }}
+                        mycol.update_one({"_id": ObjectId(message["mongoid"])}, newvalues)
+                        
 			
       send_kafka(message['timestamp'],message["mongoid"])
 
