@@ -4,8 +4,8 @@ import tensorflow as tf
 import keras
 import base64
 config = tf.compat.v1.ConfigProto
-config.gpu_options.allow_growth = True
-config.log_device_placement = True
+#config.gpu_options.allow_growth = True
+#config.log_device_placement = True
 
 tf.Session(config=config)
 
