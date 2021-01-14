@@ -170,7 +170,7 @@ mycol = mydb["leonardostream"]
 personNumber = 1
 for message in consumer:
 
-	message = message.value
+    message = message.value
     frame = frame + 1
     
     #print(message["mongoid"])
