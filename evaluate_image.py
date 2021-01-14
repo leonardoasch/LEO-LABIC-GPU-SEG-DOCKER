@@ -36,6 +36,7 @@ from io import BytesIO
 
 
 
+from kafka import KafkaProducer
 from kafka import KafkaConsumer
 import pymongo
 from pymongo import MongoClient
