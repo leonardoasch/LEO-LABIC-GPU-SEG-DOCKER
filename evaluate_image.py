@@ -116,7 +116,7 @@ def send_kafka(tempo,mongoid):
 #print("Person FOUND!!")
 
 #Load 
-DATA_DIR_CLASSES_SBD3 = "classes.txt"
+DATA_DIR_CLASSES_SBD3 = "/app/classes.txt"
 CLASSES = list(loadClasses(DATA_DIR_CLASSES_SBD3).values())
 
 print(CLASSES)
@@ -124,7 +124,7 @@ print(CLASSES)
 #Parameters
 n_classes = len(CLASSES)
 colors = sns.color_palette("hls", n_classes)
-dir_weights = "last_model.h5"
+dir_weights = "/app/last_model.h5"
 BACKBONE = 'efficientnetb4'
 preprocess_input = sm.get_preprocessing(BACKBONE)
 activation = 'sigmoid' if n_classes == 1 else 'softmax'
