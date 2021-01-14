@@ -3,7 +3,7 @@ import os
 import tensorflow as tf
 import keras
 import base64
-config = tf.ConfigProto()
+config = tf.compat.v1.ConfigProto
 config.gpu_options.allow_growth = True
 config.log_device_placement = True
 
