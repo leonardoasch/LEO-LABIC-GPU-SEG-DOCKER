@@ -173,6 +173,12 @@ consumer = KafkaConsumer(
      value_deserializer=lambda x: loads(x.decode('utf-8'))
      )
 
+# Start up producer
+producer = KafkaProducer(bootstrap_servers='10.0.10.11:9092',
+compression_type='gzip',
+linger_ms=5
+)
+
 
 myclient = pymongo.MongoClient("mongodb://10.0.10.11:27017/")
 mydb = myclient["leonardo"]
