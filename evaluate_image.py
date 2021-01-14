@@ -211,21 +211,21 @@ for message in consumer:
         masks.append(aMask)
 
 
-     mask = np.stack(masks, axis=-1).astype('float')
-     mask = np.argmax(mask, axis=-1)
+    mask = np.stack(masks, axis=-1).astype('float')
+    mask = np.argmax(mask, axis=-1)
 
 
-     classesImage, qtdClass = np.unique(mask, return_counts=True)
+    classesImage, qtdClass = np.unique(mask, return_counts=True)
 
-     for num in range(len(classesImage)):
-                idClasse = classesImage[num]
-                if CLASSES[idClasse] == 'skin' or True:
-                        qtd = qtdClass[num]
-                        newvalues = { "$set": { CLASSES[idClasse] : True }}
-                        mycol.update_one({"_id": ObjectId(message["mongoid"])}, newvalues)
+    for num in range(len(classesImage)):
+               idClasse = classesImage[num]
+               if CLASSES[idClasse] == 'skin' or True:
+                       qtd = qtdClass[num]
+                       newvalues = { "$set": { CLASSES[idClasse] : True }}
+                       mycol.update_one({"_id": ObjectId(message["mongoid"])}, newvalues)
                         
 			
-      send_kafka(message['timestamp'],message["mongoid"])
+    send_kafka(message['timestamp'],message["mongoid"])
 
-      personNumber = personNumber+1
+    personNumber = personNumber+1
 
