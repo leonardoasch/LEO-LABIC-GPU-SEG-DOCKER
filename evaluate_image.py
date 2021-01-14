@@ -173,7 +173,7 @@ personNumber = 1
 for message in consumer:
 
     message = message.value
-    frame = frame + 1
+    #frame = frame + 1
     
     #print(message["mongoid"])
     
