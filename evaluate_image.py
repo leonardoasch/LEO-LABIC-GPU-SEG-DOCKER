@@ -28,6 +28,10 @@ import argparse
 from json import loads
 from datetime import datetime
 
+from PIL import Image
+from io import BytesIO
+
+
 
 
 from kafka import KafkaConsumer
