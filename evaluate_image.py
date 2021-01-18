@@ -239,6 +239,9 @@ for message in consumer:
 
     for num in range(len(classesImage)):
                idClasse = classesImage[num]
+	       print(idClasse)
+	       print(CLASSES[idClasse])
+	
                if CLASSES[idClasse] == 'skin' or True:
                        qtd = qtdClass[num]
                        #newvalues = { "$set": { CLASSES[idClasse] : True }}
