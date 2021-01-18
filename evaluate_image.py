@@ -234,12 +234,17 @@ for message in consumer:
 
     classesImage, qtdClass = np.unique(mask, return_counts=True)
 
+    print(CLASSES)
+    input()
+
     for num in range(len(classesImage)):
                idClasse = classesImage[num]
                if CLASSES[idClasse] == 'skin' or True:
                        qtd = qtdClass[num]
-                       newvalues = { "$set": { CLASSES[idClasse] : True }}
-                       mycol.update_one({"_id": ObjectId(message["mongoid"])}, newvalues)
+                       #newvalues = { "$set": { CLASSES[idClasse] : True }}
+		       mycol.update_one({'_id': ObjectId(message["mongoid"])}, {'$push': {CLASSES[idClasse]: true}})
+			
+                       #mycol.update_one({"_id": ObjectId(message["mongoid"])}, newvalues)
                         
 			
     send_kafka(message['timestamp'],message["mongoid"])
