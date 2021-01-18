@@ -245,7 +245,7 @@ for message in consumer:
                if CLASSES[idClasse] == 'skin' or True:
                        qtd = qtdClass[num]
                        #newvalues = { "$set": { CLASSES[idClasse] : True }}
-                       mycol.update_one({'_id': ObjectId(message["mongoid"])}, {'$push': {CLASSES[idClasse]: true}})
+                       mycol.update_one({'_id': ObjectId(message["mongoid"])}, {'$push': {CLASSES[idClasse]: True}})
 			
                        #mycol.update_one({"_id": ObjectId(message["mongoid"])}, newvalues)
                         
