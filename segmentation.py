@@ -326,7 +326,7 @@ topic = "leonardo-stream-2"
 
 consumer = KafkaConsumer(
      topic,
-     bootstrap_servers=['10.0.10.1:9092'],
+     bootstrap_servers=['10.0.10.11:9092'],
      auto_offset_reset='earliest',
      enable_auto_commit=True,
      group_id='my-group',
@@ -334,7 +334,7 @@ consumer = KafkaConsumer(
      )
 
 
-myclient = pymongo.MongoClient("mongodb://10.0.10.4:27017/")
+myclient = pymongo.MongoClient("mongodb://10.0.10.1:27017/")
 mydb = myclient["leonardo"]
 mycol = mydb["leonardostream"]
 
