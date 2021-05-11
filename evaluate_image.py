@@ -235,7 +235,6 @@ for message in consumer:
     classesImage, qtdClass = np.unique(mask, return_counts=True)
 
     print(CLASSES)
-    input()
 
     for num in range(len(classesImage)):
                idClasse = classesImage[num]
