@@ -207,8 +207,9 @@ for message in consumer:
     
     image = stringToRGB(data['data'])
 	
-    if (type(image) is np.ndarray):
-
+    if image is None:
+	
+    else:
 
             aPerson = image[bboxes["StartY"]:bboxes["EndY"],bboxes["StartX"]:bboxes["EndX"]]
 
