@@ -208,10 +208,17 @@ for message in consumer:
     image = stringToRGB(data['data'])
 	
     if (image.all() != None):
+	
+
 
             aPerson = image[bboxes["StartY"]:bboxes["EndY"],bboxes["StartX"]:bboxes["EndX"]]
+		
+	    try:
+            	aPerson = cv2.resize(aPerson, (INPUT_HEIGHT,INPUT_WIDTH), interpolation = cv2.INTER_NEAREST)
+            except cv2.error:
+            	continue
 
-            aPerson = cv2.resize(aPerson, (INPUT_HEIGHT,INPUT_WIDTH), interpolation = cv2.INTER_NEAREST)
+            
 
             X = preprocess_input(aPerson)
             X = np.expand_dims(X, axis=0)
