@@ -207,9 +207,7 @@ for message in consumer:
     
     image = stringToRGB(data['data'])
 	
-    if image is None:
-	
-    else:
+    if (image != None):
 
             aPerson = image[bboxes["StartY"]:bboxes["EndY"],bboxes["StartX"]:bboxes["EndX"]]
 
