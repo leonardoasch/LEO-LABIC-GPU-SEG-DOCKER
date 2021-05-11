@@ -192,7 +192,7 @@ for message in consumer:
     
     #print(message["mongoid"])
     
-    data = mycol.find_one({"_id": message["mongoid"]})
+    data = mycol.find_one({"_id": ObjectId(message["mongoid"])})
 
     tempo = datetime.strptime(message["timestamp"], '%Y-%m-%d %H:%M:%S.%f')    
     
@@ -245,7 +245,7 @@ for message in consumer:
                if CLASSES[idClasse] == 'skin' or True:
                        qtd = qtdClass[num]
                        #newvalues = { "$set": { CLASSES[idClasse] : True }}
-                       mycol.update_one({'_id': message["mongoid"]}, {'$push': {CLASSES[idClasse]: True}})
+                       mycol.update_one({'_id': ObjectId(message["mongoid"])}, {'$push': {CLASSES[idClasse]: True}})
 			
                        #mycol.update_one({"_id": ObjectId(message["mongoid"])}, newvalues)
                         
