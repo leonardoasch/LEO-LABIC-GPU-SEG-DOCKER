@@ -206,50 +206,52 @@ for message in consumer:
     
     
     image = stringToRGB(data['data'])
-
-    
-    aPerson = image[bboxes["StartY"]:bboxes["EndY"],bboxes["StartX"]:bboxes["EndX"]]
 	
-    aPerson = cv2.resize(aPerson, (INPUT_HEIGHT,INPUT_WIDTH), interpolation = cv2.INTER_NEAREST)
-
-    X = preprocess_input(aPerson)
-    X = np.expand_dims(X, axis=0)
-    y_pred = model.predict(X, verbose=1)
-
-    mask = np.argmax(y_pred, axis=-1)
-    class_values = [CLASSES.index(cls.lower()) for cls in CLASSES]
-    masks = [(mask == v) for v in class_values]
-    masks = []
-    for v in class_values:
-        aMask = (mask == v)
-        kernel = np.ones((5,5))
-        aMask = np.array(aMask, dtype=np.uint8)
-        aMask = cv2.morphologyEx(aMask, cv2.MORPH_OPEN, kernel)
-        masks.append(aMask)
+     if (type(img) is np.ndarray):
 
 
-    mask = np.stack(masks, axis=-1).astype('float')
-    mask = np.argmax(mask, axis=-1)
+            aPerson = image[bboxes["StartY"]:bboxes["EndY"],bboxes["StartX"]:bboxes["EndX"]]
+
+            aPerson = cv2.resize(aPerson, (INPUT_HEIGHT,INPUT_WIDTH), interpolation = cv2.INTER_NEAREST)
+
+            X = preprocess_input(aPerson)
+            X = np.expand_dims(X, axis=0)
+            y_pred = model.predict(X, verbose=1)
+
+            mask = np.argmax(y_pred, axis=-1)
+            class_values = [CLASSES.index(cls.lower()) for cls in CLASSES]
+            masks = [(mask == v) for v in class_values]
+            masks = []
+            for v in class_values:
+                aMask = (mask == v)
+                kernel = np.ones((5,5))
+                aMask = np.array(aMask, dtype=np.uint8)
+                aMask = cv2.morphologyEx(aMask, cv2.MORPH_OPEN, kernel)
+                masks.append(aMask)
 
 
-    classesImage, qtdClass = np.unique(mask, return_counts=True)
+            mask = np.stack(masks, axis=-1).astype('float')
+            mask = np.argmax(mask, axis=-1)
 
-    print(CLASSES)
 
-    for num in range(len(classesImage)):
-               idClasse = classesImage[num]
-               print(idClasse)
-               print(CLASSES[idClasse])
-	
-               if CLASSES[idClasse] == 'skin' or True:
-                       qtd = qtdClass[num]
-                       #newvalues = { "$set": { CLASSES[idClasse] : True }}
-                       mycol.update_one({'_id': ObjectId(message["mongoid"])}, {'$push': {CLASSES[idClasse]: True}})
-			
-                       #mycol.update_one({"_id": ObjectId(message["mongoid"])}, newvalues)
-                        
-			
-    send_kafka(message['timestamp'],message["mongoid"])
+            classesImage, qtdClass = np.unique(mask, return_counts=True)
 
-    personNumber = personNumber+1
+            print(CLASSES)
+
+            for num in range(len(classesImage)):
+                       idClasse = classesImage[num]
+                       print(idClasse)
+                       print(CLASSES[idClasse])
+
+                       if CLASSES[idClasse] == 'skin' or True:
+                               qtd = qtdClass[num]
+                               #newvalues = { "$set": { CLASSES[idClasse] : True }}
+                               mycol.update_one({'_id': ObjectId(message["mongoid"])}, {'$push': {CLASSES[idClasse]: True}})
+
+                               #mycol.update_one({"_id": ObjectId(message["mongoid"])}, newvalues)
+
+
+            send_kafka(message['timestamp'],message["mongoid"])
+
+            personNumber = personNumber+1
 
