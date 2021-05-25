@@ -152,7 +152,7 @@ model = sm.FPN(BACKBONE, classes=n_classes, activation=activation)
 model.load_weights(dir_weights)
 optim = keras.optimizers.Adam(LR)
 total_loss = "categorical_crossentropy"
-metrics = [sm.metrics.IOUScore(threshold=0.8), sm.metrics.FScore(threshold=0.8)]
+metrics = [sm.metrics.IOUScore(threshold=0.5), sm.metrics.FScore(threshold=0.5)]
 model.compile(optim, total_loss, metrics)
 preprocess_input = sm.get_preprocessing(BACKBONE)
 
