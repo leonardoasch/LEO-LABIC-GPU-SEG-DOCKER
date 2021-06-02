@@ -247,7 +247,7 @@ for message in consumer:
         boxs = np.array([d.tlwh for d in detections])
         scores = np.array([d.confidence for d in detections])
         #perform non-maxima suppression on deep sort detections
-        indices = preprocessing.non_max_suppression(boxs, args['nms_threshold'], scores)
+        indices = preprocessing.non_max_suppression(boxs, 8, scores)
         detections = [detections[i] for i in indices]
         # update tracker
         tracker.predict()
