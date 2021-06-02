@@ -261,8 +261,8 @@ for message in consumer:
 
             for track in tracker.tracks:
                 f_box = track.to_tlbr()
-                print(f_box)
-                mycol.update_one({'bbox': {"StartX":f_box[0], "StartY":f_box[1], "EndX":f_box[2], "EndY":f_box[3]}}, {'$push': {"trackid": track.track_id}})
+                print(Int(f_box))
+                mycol.update_one({'bbox': {"StartX":Int(f_box[0]), "StartY":Int(f_box[1]), "EndX":Int(f_box[2]), "EndY":Int(f_box[3])}}, {'$push': {"trackid": track.track_id}})
                 
         except:
             print("track error")        
