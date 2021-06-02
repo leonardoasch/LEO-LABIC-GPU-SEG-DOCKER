@@ -263,7 +263,7 @@ for message in consumer:
         scores = []
 
     
-    
+    box = [bboxes["StartX"],bboxes["StartY"],bboxes["EndX"],bboxes["EndY"]]
     
     bbboxes.append(box)
     names.append("person")
