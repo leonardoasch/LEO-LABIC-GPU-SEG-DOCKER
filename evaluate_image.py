@@ -207,6 +207,7 @@ tracker = Tracker(metric)
 bbboxes = []
 names = []
 scores = []
+insert = []
 
 
 trackableObjects ={}
@@ -257,18 +258,22 @@ for message in consumer:
             tracker.predict()
             tracker.update(detections)
             # loop over tracked objects
+            ins = 0
             
 
             for track in tracker.tracks:
-                f_box = track.to_tlbr()
-                print(Int(f_box[0]),Int(f_box[1]),Int(f_box[2]),Int(f_box[3]))
-                mycol.update_one({'bbox': {"StartX":Int(f_box[0]), "StartY":Int(f_box[1]), "EndX":Int(f_box[2]), "EndY":Int(f_box[3])}}, {'$push': {"trackid": track.track_id}})
+                #f_box = track.to_tlbr()
+                #print(Int(f_box[0]),Int(f_box[1]),Int(f_box[2]),Int(f_box[3]))
+                #mycol.update_one({'bbox': {"StartX":Int(f_box[0]), "StartY":Int(f_box[1]), "EndX":Int(f_box[2]), "EndY":Int(f_box[3])}}, {'$push': {"trackid": track.track_id}})
+                mycol.update_one({ObjectId(insert[ins])}, {'$push': {"trackid": track.track_id}})
+                ins = ins + 1
                 
         except:
             print("track error")        
         bbboxes = []
         names = []
         scores = []
+        insert = []
         
 
     
@@ -277,6 +282,7 @@ for message in consumer:
     bbboxes.append(box)
     names.append("person")
     scores.append(1)
+    insert.append(message["mongoid"]]	
 	
     if (image.all() != None):
 	
@@ -308,7 +314,7 @@ for message in consumer:
 
                     classesImage, qtdClass = np.unique(mask, return_counts=True)
 
-                    print(CLASSES)
+                    #print(CLASSES)
 
                     for num in range(len(classesImage)):
                                idClasse = classesImage[num]
