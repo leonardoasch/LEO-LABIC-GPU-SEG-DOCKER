@@ -208,6 +208,7 @@ bbboxes = []
 names = []
 scores = []
 
+
 trackableObjects ={}
 detections = []
 
@@ -231,35 +232,44 @@ for message in consumer:
     
 
     bboxes = data['bbox']
+    print(bboxes)
     image = stringToRGB(data['data'])
 
     
     if frameidd != data['frameid']:
         frameidd = data['frameid']
-    
-        names = np.array(names)
-        bbboxes = np.array(bbboxes)
-        scores = np.array(scores)
-        features = encoder(image, bbboxes)
-        # perform deep sort detection
-        detections = [Detection(bbox, score,class_name,  feature) for bbox, score, class_name, feature in zip(bbboxes, scores, names, features)]
-        # grab boxes, scores, and classes_name from deep sort detections
-        boxs = np.array([d.tlwh for d in detections])
-        scores = np.array([d.confidence for d in detections])
-        #perform non-maxima suppression on deep sort detections
-        indices = preprocessing.non_max_suppression(boxs, 8, scores)
-        detections = [detections[i] for i in indices]
-        # update tracker
-        tracker.predict()
-        tracker.update(detections)
-        # loop over tracked objects
-
-        for track in tracker.tracks:
-          print(track.track_id)
         
+        try:
+
+            names = np.array(names)
+            bbboxes = np.array(bbboxes)
+            scores = np.array(scores)
+            features = encoder(image, bbboxes)
+            # perform deep sort detection
+            detections = [Detection(bbox, score,class_name,  feature) for bbox, score, class_name, feature in zip(bbboxes, scores, names, features)]
+            # grab boxes, scores, and classes_name from deep sort detections
+            boxs = np.array([d.tlwh for d in detections])
+            scores = np.array([d.confidence for d in detections])
+            #perform non-maxima suppression on deep sort detections
+            indices = preprocessing.non_max_suppression(boxs, 8, scores)
+            detections = [detections[i] for i in indices]
+            # update tracker
+            tracker.predict()
+            tracker.update(detections)
+            # loop over tracked objects
+            
+
+            for track in tracker.tracks:
+                f_box = track.to_tlbr()
+                print(f_box)
+                mycol.update_one({'bbox': {"StartX":f_box[0], "StartY":f_box[1], "EndX":f_box[2], "EndY":f_box[3]}}, {'$push': {"trackid": track.track_id}})
+                
+        except:
+            print("track error")        
         bbboxes = []
         names = []
         scores = []
+        
 
     
     box = [bboxes["StartX"],bboxes["StartY"],bboxes["EndX"]-bboxes["StartX"],bboxes["EndY"]-bboxes["StartY"]]
@@ -267,6 +277,7 @@ for message in consumer:
     bbboxes.append(box)
     names.append("person")
     scores.append(1)
+    inserts.append(message["mongoid"])
 	
     if (image.all() != None):
 	
@@ -302,8 +313,8 @@ for message in consumer:
 
                     for num in range(len(classesImage)):
                                idClasse = classesImage[num]
-                               print(idClasse)
-                               print(CLASSES[idClasse])
+                               #print(idClasse)
+                               #print(CLASSES[idClasse])
 
                                if CLASSES[idClasse] == 'skin' or True:
                                        qtd = qtdClass[num]
