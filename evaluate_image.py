@@ -191,7 +191,7 @@ linger_ms=5
 myclient = pymongo.MongoClient("mongodb://10.0.10.1:27017/")
 mydb = myclient["leonardo"]
 mycol = mydb["leonardostream"]
-frameidd = -1
+frameidd = 0
 
 # Definition of the parameters
 max_cosine_distance = 0.5
@@ -214,8 +214,6 @@ detections = []
 personNumber = 1
 for message in consumer:
     
-    
-
         
 
     message = message.value
@@ -234,9 +232,10 @@ for message in consumer:
 
     bboxes = data['bbox']
     image = stringToRGB(data['data'])
+
     
-    if frameidd != message["frameid"]:
-        frameidd = message["frameid"]
+    if frameidd != data['frameid']:
+        frameidd = data['frameid']
     
         names = np.array(names)
         bbboxes = np.array(bbboxes)
