@@ -199,8 +199,8 @@ nn_budget = None
 nms_max_overlap = 1.0
 
 #initialize deep sort
-model_filename = 'model_data/mars-small128.pb'
-encoder = gdet.create_box_encoder("./model_data/mars-small128.pb", batch_size=1)
+model_filename = '/app/model_data/mars-small128.pb'
+encoder = gdet.create_box_encoder(model_filename, batch_size=1)
 metric = nn_matching.NearestNeighborDistanceMetric("cosine", max_cosine_distance, nn_budget)
 tracker = Tracker(metric)
 
