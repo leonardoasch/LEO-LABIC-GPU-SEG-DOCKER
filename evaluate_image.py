@@ -256,14 +256,13 @@ for message in consumer:
 
         for track in tracker.tracks:
           print(track.track_id)
-          input()
         
         bbboxes = []
         names = []
         scores = []
 
     
-    box = [bboxes["StartX"],bboxes["StartY"],bboxes["EndX"],bboxes["EndY"]]
+    box = [bboxes["StartX"],bboxes["StartY"],bboxes["EndX"]-bboxes["StartX"],bboxes["EndY"]-bboxes["StartY"]]
     
     bbboxes.append(box)
     names.append("person")
