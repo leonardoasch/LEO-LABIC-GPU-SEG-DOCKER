@@ -33,6 +33,14 @@ from datetime import datetime
 from PIL import Image
 from io import BytesIO
 
+from deep_sort import preprocessing
+from deep_sort import nn_matching
+from deep_sort.detection import Detection
+from deep_sort.tracker import Tracker
+
+
+from deep_sort import generate_detections as gdet
+
 
 
 
@@ -183,9 +191,31 @@ linger_ms=5
 myclient = pymongo.MongoClient("mongodb://10.0.10.1:27017/")
 mydb = myclient["leonardo"]
 mycol = mydb["leonardostream"]
+frameidd = 0
+
+# Definition of the parameters
+max_cosine_distance = 0.5
+nn_budget = None
+nms_max_overlap = 1.0
+
+#initialize deep sort
+model_filename = 'model_data/mars-small128.pb'
+metric = nn_matching.NearestNeighborDistanceMetric("cosine", max_cosine_distance, nn_budget)
+tracker = Tracker(metric)
+
+bboxes = []
+names = []
+scores = []
+
+trackableObjects ={}
+detections = []
 
 personNumber = 1
 for message in consumer:
+    
+    
+
+        
 
     message = message.value
     #frame = frame + 1
@@ -202,10 +232,40 @@ for message in consumer:
     
 
     bboxes = data['bbox']
+    
+    if frameidd != message["frameid"]:
+        frameidd = message["frameid"]
+    
+        names = np.array(names)
+        bboxes = np.array(bboxes)
+        scores = np.array(scores)
+        features = encoder(frame, bboxes)
+        # perform deep sort detection
+        detections = [Detection(bbox, score,class_name,  feature) for bbox, score, class_name, feature in zip(bboxes, scores, names, features)]
+        # grab boxes, scores, and classes_name from deep sort detections
+        boxs = np.array([d.tlwh for d in detections])
+        scores = np.array([d.confidence for d in detections])
+        #perform non-maxima suppression on deep sort detections
+        indices = preprocessing.non_max_suppression(boxs, args['nms_threshold'], scores)
+        detections = [detections[i] for i in indices]
+        # update tracker
+        tracker.predict()
+        tracker.update(detections)
+        # loop over tracked objects
+
+        for track in tracker.tracks:
+          print(track.track_id)
+        
+        bboxes = []
+        names = []
+        scores = []
 
     
     
     image = stringToRGB(data['data'])
+    bboxes.append(box)
+    names.append("person")
+    scores.append(1)
 	
     if (image.all() != None):
 	
