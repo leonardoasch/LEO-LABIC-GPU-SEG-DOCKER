@@ -265,7 +265,7 @@ for message in consumer:
     
     
     
-    bboxes.append(box)
+    bbboxes.append(box)
     names.append("person")
     scores.append(1)
 	
