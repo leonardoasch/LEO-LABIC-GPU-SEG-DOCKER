@@ -255,7 +255,7 @@ for message in consumer:
 
         for track in tracker.tracks:
           print(track.track_id)
-	  input()
+          input()
         
         bboxes = []
         names = []
