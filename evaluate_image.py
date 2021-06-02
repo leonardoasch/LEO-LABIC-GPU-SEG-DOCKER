@@ -191,7 +191,7 @@ linger_ms=5
 myclient = pymongo.MongoClient("mongodb://10.0.10.1:27017/")
 mydb = myclient["leonardo"]
 mycol = mydb["leonardostream"]
-frameidd = 0
+frameidd = -1
 
 # Definition of the parameters
 max_cosine_distance = 0.5
@@ -200,10 +200,11 @@ nms_max_overlap = 1.0
 
 #initialize deep sort
 model_filename = 'model_data/mars-small128.pb'
+encoder = gdet.create_box_encoder("model_data/mars-small128.pb", batch_size=1)
 metric = nn_matching.NearestNeighborDistanceMetric("cosine", max_cosine_distance, nn_budget)
 tracker = Tracker(metric)
 
-bboxes = []
+bbboxes = []
 names = []
 scores = []
 
@@ -232,16 +233,17 @@ for message in consumer:
     
 
     bboxes = data['bbox']
+    image = stringToRGB(data['data'])
     
     if frameidd != message["frameid"]:
         frameidd = message["frameid"]
     
         names = np.array(names)
-        bboxes = np.array(bboxes)
+        bbboxes = np.array(bbboxes)
         scores = np.array(scores)
-        features = encoder(frame, bboxes)
+        features = encoder(image, bbboxes)
         # perform deep sort detection
-        detections = [Detection(bbox, score,class_name,  feature) for bbox, score, class_name, feature in zip(bboxes, scores, names, features)]
+        detections = [Detection(bbox, score,class_name,  feature) for bbox, score, class_name, feature in zip(bbboxes, scores, names, features)]
         # grab boxes, scores, and classes_name from deep sort detections
         boxs = np.array([d.tlwh for d in detections])
         scores = np.array([d.confidence for d in detections])
@@ -257,13 +259,13 @@ for message in consumer:
           print(track.track_id)
           input()
         
-        bboxes = []
+        bbboxes = []
         names = []
         scores = []
 
     
     
-    image = stringToRGB(data['data'])
+    
     bboxes.append(box)
     names.append("person")
     scores.append(1)
