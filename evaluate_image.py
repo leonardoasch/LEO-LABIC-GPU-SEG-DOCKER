@@ -277,7 +277,6 @@ for message in consumer:
     bbboxes.append(box)
     names.append("person")
     scores.append(1)
-    inserts.append(message["mongoid"])
 	
     if (image.all() != None):
 	
