@@ -33,16 +33,6 @@ from datetime import datetime
 from PIL import Image
 from io import BytesIO
 
-from deep_sort import preprocessing
-from deep_sort import nn_matching
-from deep_sort.detection import Detection
-from deep_sort.tracker import Tracker
-
-
-from deep_sort import generate_detections as gdet
-
-
-
 
 from kafka import KafkaProducer
 from kafka import KafkaConsumer
@@ -193,25 +183,6 @@ mydb = myclient["leonardo"]
 mycol = mydb["leonardostream"]
 frameidd = 0
 
-# Definition of the parameters
-max_cosine_distance = 0.5
-nn_budget = None
-nms_max_overlap = 1.0
-
-#initialize deep sort
-model_filename = '/app/model_data/mars-small128.pb'
-encoder = gdet.create_box_encoder(model_filename, batch_size=1)
-metric = nn_matching.NearestNeighborDistanceMetric("cosine", max_cosine_distance, nn_budget)
-tracker = Tracker(metric)
-
-bbboxes = []
-names = []
-scores = []
-insert = []
-
-
-trackableObjects ={}
-detections = []
 
 personNumber = 1
 for message in consumer:
@@ -236,53 +207,6 @@ for message in consumer:
     print(bboxes)
     image = stringToRGB(data['data'])
 
-    
-    if frameidd != data['frameid']:
-        frameidd = data['frameid']
-        
-        try:
-
-            names = np.array(names)
-            bbboxes = np.array(bbboxes)
-            scores = np.array(scores)
-            features = encoder(image, bbboxes)
-            # perform deep sort detection
-            detections = [Detection(bbox, score,class_name,  feature) for bbox, score, class_name, feature in zip(bbboxes, scores, names, features)]
-            # grab boxes, scores, and classes_name from deep sort detections
-            boxs = np.array([d.tlwh for d in detections])
-            scores = np.array([d.confidence for d in detections])
-            #perform non-maxima suppression on deep sort detections
-            indices = preprocessing.non_max_suppression(boxs, 8, scores)
-            detections = [detections[i] for i in indices]
-            # update tracker
-            tracker.predict()
-            tracker.update(detections)
-            # loop over tracked objects
-            ins = 0
-            
-
-            for track in tracker.tracks:
-                #f_box = track.to_tlbr()
-                #print(Int(f_box[0]),Int(f_box[1]),Int(f_box[2]),Int(f_box[3]))
-                #mycol.update_one({'bbox': {"StartX":Int(f_box[0]), "StartY":Int(f_box[1]), "EndX":Int(f_box[2]), "EndY":Int(f_box[3])}}, {'$push': {"trackid": track.track_id}})
-                mycol.update_one({'_id': ObjectId(insert[ins])}, {'$set': {"trackid": track.track_id}})
-                ins = ins + 1
-                
-        except:
-            print("track error")        
-        bbboxes = []
-        names = []
-        scores = []
-        insert = []
-        
-
-    
-    box = [bboxes["StartX"],bboxes["StartY"],bboxes["EndX"]-bboxes["StartX"],bboxes["EndY"]-bboxes["StartY"]]
-    
-    bbboxes.append(box)
-    names.append("person")
-    scores.append(1)
-    insert.append(message["mongoid"])	
 	
     if (image.all() != None):
 	
